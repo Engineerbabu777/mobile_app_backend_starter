@@ -1,3 +1,5 @@
+import { User } from '@/prisma/generated/prisma/client.js';
+
 export interface SignupInput {
   email: string;
   password: string;
@@ -16,4 +18,9 @@ export interface ForgotPasswordInput {
 export interface ResetPasswordInput {
   token: string;
   password: string;
+}
+
+export interface AuthResponse {
+  user: Pick<User, 'id' | 'email' | 'name'>;
+  token: string;
 }
