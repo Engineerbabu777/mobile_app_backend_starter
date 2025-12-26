@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-redundant-type-constituents */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { SignupInput } from '../types/auth.types.js';
 
 import { PasswordResetToken, User } from '@/prisma/generated/prisma/client.js';
