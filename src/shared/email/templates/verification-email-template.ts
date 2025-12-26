@@ -4,7 +4,7 @@ export const verificationEmailTemplate = (code: string) => {
     <div style="max-width: 500px; margin: auto; background: #ffffff; border-radius: 8px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
       <h2 style="color: #2563eb; margin-bottom: 20px;">Verify Your Email</h2>
       <p style="font-size: 16px; color: #374151;">
-        Welcome to <b>App Name</b> 🎉 <br><br>
+        Welcome to <b>Luna Ai</b> 🎉 <br><br>
         Please use the verification code below to verify your email address:
       </p>
       <div style="margin: 30px 0;">
@@ -18,7 +18,7 @@ export const verificationEmailTemplate = (code: string) => {
       </p>
     </div>
     <p style="margin-top: 20px; font-size: 12px; color: #9ca3af;">
-      © ${new Date().getFullYear()} App Name. All rights reserved.
+      © ${new Date().getFullYear()} Luna Ai. All rights reserved.
     </p>
   </div>
 `;

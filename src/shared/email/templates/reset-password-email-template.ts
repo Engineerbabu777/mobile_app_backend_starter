@@ -3,7 +3,7 @@ export const resetPasswordHtmlTemplate = (code: string) => `
     <div style="max-width: 500px; margin: auto; background: #ffffff; border-radius: 8px; padding: 30px; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
       <h2 style="color: #dc2626; margin-bottom: 20px;">Reset Your Password</h2>
       <p style="font-size: 16px; color: #374151;">
-        We received a request to reset your password for your <b>App Name</b> account.  
+        We received a request to reset your password for your <b>Luna Ai</b> account.  
         Please use the code below to reset your password:
       </p>
       <div style="margin: 30px 0;">
@@ -17,7 +17,7 @@ export const resetPasswordHtmlTemplate = (code: string) => `
       </p>
     </div>
     <p style="margin-top: 20px; font-size: 12px; color: #9ca3af;">
-      © ${new Date().getFullYear()} App Name. All rights reserved.
+      © ${new Date().getFullYear()} Luna Ai. All rights reserved.
     </p>
   </div>
 `;
