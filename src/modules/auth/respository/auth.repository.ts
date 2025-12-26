@@ -29,10 +29,14 @@ export const createPasswordResetTokenRepository = async (
   return await prisma.passwordResetToken.create({ data: { userId, token, expiresAt } });
 };
 
-export const findPasswordResetToken = async (token: string): Promise<PasswordResetToken | null> => {
+export const findPasswordResetTokenRepository = async (
+  token: string,
+): Promise<PasswordResetToken | null> => {
   return await prisma.passwordResetToken.findUnique({ where: { token } });
 };
 
-export const deletePasswordResetToken = async (id: string): Promise<PasswordResetToken> => {
+export const deletePasswordResetTokenRepository = async (
+  id: string,
+): Promise<PasswordResetToken> => {
   return await prisma.passwordResetToken.delete({ where: { id } });
 };
