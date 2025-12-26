@@ -12,7 +12,14 @@ export const signupController = async (
   try {
     const body = req.body;
     const result = await signupService(body);
-    return res.status(201).json({ success: true, data: result });
+    return res.status(201).json({
+      success: true,
+      message: 'Signup successful. Please verify your email.',
+      data: {
+        id: result.user.id,
+        email: result.user.email,
+      },
+    });
   } catch (err) {
     next(err);
   }

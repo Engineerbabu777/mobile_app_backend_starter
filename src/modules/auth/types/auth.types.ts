@@ -27,5 +27,5 @@ export interface VerifyEmailQueryInput {
 
 export interface AuthResponse {
   user: Pick<User, 'id' | 'email' | 'name'>;
-  token: string;
+  token?: string;
 }

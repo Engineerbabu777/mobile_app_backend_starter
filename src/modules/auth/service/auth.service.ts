@@ -23,8 +23,7 @@ export const signupService = async (data: SignupInput): Promise<AuthResponse> =>
   const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
 
   await sendVerificationEmailUtil(user.email, verificationCode);
-  const token = generateToken({ id: user.id, email: user.email });
-  return { user: { id: user.id, email: user.email, name: user.name }, token };
+  return { user: { id: user.id, email: user.email, name: user.name } };
 };
 
 export const signinService = async (data: SigninInput): Promise<AuthResponse> => {
