@@ -85,3 +85,9 @@ export const deleteVerificationTokenToken = async (id: string): Promise<void> =>
     where: { id },
   });
 };
+
+export const createPasswordResetToken = async (userId: string, token: string, expiresAt: Date) => {
+  return await prisma.passwordResetToken.create({
+    data: { userId, token, expiresAt },
+  });
+};
