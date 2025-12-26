@@ -78,10 +78,14 @@ export const findVerificationTokenToken = async (token: string) => {
 };
 
 export const markUserVerifiedToken = async (userId: string): Promise<void> => {
-  await prisma.user.update({
-    where: { id: userId },
-    data: { isVerified: true },
-  });
+  try {
+    await prisma.user.update({
+      where: { id: userId },
+      data: { isVerified: true },
+    });
+  } catch (err: unknown) {
+    throw err instanceof Error ? err : new Error(String(err));
+  }
 };
 
 export const deleteVerificationTokenRepository = async (id: string): Promise<void> => {
