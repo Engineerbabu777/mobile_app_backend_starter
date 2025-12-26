@@ -1,8 +1,18 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 import { NextFunction, Request, Response } from 'express';
 
-import { signinService, signupService, verifyEmailService } from '../service/auth.service.js';
-import { SigninInput, SignupInput, VerifyEmailQueryInput } from '../types/auth.types.js';
+import {
+  forgotPasswordService,
+  signinService,
+  signupService,
+  verifyEmailService,
+} from '../service/auth.service.js';
+import {
+  ForgotPasswordInput,
+  SigninInput,
+  SignupInput,
+  VerifyEmailQueryInput,
+} from '../types/auth.types.js';
 
 export const signupController = async (
   req: Request<{}, {}, SignupInput>,
@@ -54,6 +64,20 @@ export const verifyEmailController = async (
     res.status(200).json({
       success: true,
       message: 'Email verified successfully',
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const forgotPasswordController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { email } = req.body as ForgotPasswordInput;
+    await forgotPasswordService(email);
+
+    res.status(200).json({
+      success: true,
+      message: 'Reset code sent to your email if the user exists',
     });
   } catch (err) {
     next(err);
