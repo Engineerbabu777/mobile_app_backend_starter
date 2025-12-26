@@ -9,9 +9,8 @@ import {
   markUserVerifiedToken,
 } from '../respository/auth.repository.js';
 import { AuthResponse, SigninInput, SignupInput } from '../types/auth.types.js';
+import { sendVerificationEmailUtil } from '../utils/auth.utils.js';
 
-import { sendEmailHelper } from '@/src/shared/email/send-email.js';
-import { verificationEmailTemplate } from '@/src/shared/email/templates/verification-email-template.js';
 import { comparePassword, hashPassword } from '@/src/shared/utils/hash.js';
 import { generateToken } from '@/src/shared/utils/jwt.js';
 
@@ -21,7 +20,9 @@ export const signupService = async (data: SignupInput): Promise<AuthResponse> =>
 
   const hashed = await hashPassword(data.password);
   const user = await createUserRepository({ ...data, password: hashed });
+  const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
 
+  await sendVerificationEmailUtil(user.email, verificationCode);
   const token = generateToken({ id: user.id, email: user.email });
   return { user: { id: user.id, email: user.email, name: user.name }, token };
 };
@@ -50,12 +51,4 @@ export const verifyEmailService = async (token: string): Promise<void> => {
 
   await markUserVerifiedToken(record.userId);
   await deleteVerificationTokenRepository(record.id);
-};
-
-export const sendVerificationEmailService = async (email: string, code: string): Promise<void> => {
-  await sendEmailHelper({
-    to: email,
-    subject: 'Verify your email',
-    html: verificationEmailTemplate(code),
-  });
 };
