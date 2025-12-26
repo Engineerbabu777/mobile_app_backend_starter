@@ -11,9 +11,15 @@
     "format": "prettier --write \"src/**/*.ts\"",
     "type-check": "tsc --noEmit",
     "prepare": "husky",
-    "prisma:generate": "prisma generate",
-    "prisma:migrate:dev": "prisma migrate dev",
-    "prisma:studio": "prisma studio --config ./prisma.config.ts"
+    "prisma:generate": "prisma generate --config ./src/config/prisma.config.ts",
+    "prisma:migrate:dev": "prisma migrate dev --config ./src/config/prisma.config.ts",
+    "prisma:migrate:reset": "prisma migrate reset --force --config ./src/config/prisma.config.ts",
+    "prisma:studio": "prisma studio --config ./src/config/prisma.config.ts",
+    "prisma:db-pull": "prisma db pull --config ./src/config/prisma.config.ts",
+    "prisma:diff": "prisma migrate diff --from-empty --to-schema prisma/schema.prisma --script",
+    "db:reset": "npm run prisma:migrate:reset && npm run prisma:generate",
+    "db:pull": "npm run prisma:db-pull && npm run prisma:generate",
+    "db:dev": "npm run prisma:migrate:dev && npm run prisma:generate"
   },
   "keywords": [],
   "author": "",
