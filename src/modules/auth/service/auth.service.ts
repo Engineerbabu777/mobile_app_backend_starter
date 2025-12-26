@@ -3,7 +3,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import {
   createUserRepository,
-  deleteVerificationTokenToken,
+  deleteVerificationTokenRepository,
   findUserByEmailRepository,
   findVerificationTokenToken,
   markUserVerifiedToken,
@@ -47,5 +47,5 @@ export const verifyEmailService = async (token: string): Promise<void> => {
   }
 
   await markUserVerifiedToken(record.userId);
-  await deleteVerificationTokenToken(record.id);
+  await deleteVerificationTokenRepository(record.id);
 };
