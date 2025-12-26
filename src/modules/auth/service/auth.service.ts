@@ -1,7 +1,10 @@
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import { addMinutes } from 'date-fns';
+
 import {
+  createPasswordResetCodeRepository,
   createUserRepository,
   deleteVerificationTokenRepository,
   findEmailVerificationTokenRepository,
@@ -55,4 +58,16 @@ export const verifyEmailService = async (token: string): Promise<void> => {
 
   await markUserVerifiedToken(record.userId);
   await deleteVerificationTokenRepository(record.id);
+};
+
+export const forgotPasswordService = async (email: string): Promise<void> => {
+  const user = await findUserByEmailRepository(email);
+  if (!user) throw new Error('User with this email does not exist');
+
+  // generate 6-digit code
+  const code = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiresAt = addMinutes(new Date(), 10);
+
+  await createPasswordResetCodeRepository(user.id, code, expiresAt);
+  // await send(user.email, code);
 };
