@@ -4,6 +4,7 @@
 import { addMinutes } from 'date-fns';
 
 import {
+  createEmailVerificationTokenRepository,
   createPasswordResetCodeRepository,
   createUserRepository,
   deletePasswordResetCodeRepository,
@@ -28,7 +29,9 @@ export const signupService = async (data: SignupInput): Promise<AuthResponse> =>
   const hashed = await hashPassword(data.password);
   const user = await createUserRepository({ ...data, password: hashed });
   const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiresAt = addMinutes(new Date(), 10);
 
+  await createEmailVerificationTokenRepository(user.id, verificationCode, expiresAt);
   await sendVerificationEmailUtil(user.email, verificationCode);
   return { user: toPublicUser(user) };
 };
@@ -84,7 +87,7 @@ export const resetPasswordService = async (
   if (record.expiresAt < new Date()) throw new Error('Code expired');
 
   const hashedPassword = await hashPassword(newPassword);
-  await updateUserPasswordRepository(record.id, hashedPassword);
+  await updateUserPasswordRepository(record.userId, hashedPassword);
 
   await deletePasswordResetCodeRepository(record.id);
 };
