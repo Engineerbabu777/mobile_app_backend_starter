@@ -15,7 +15,11 @@ export const createUserRepository = async (data: SignupInput): Promise<User> => 
 };
 
 export const findUserByEmailRepository = async (email: string): Promise<User | null> => {
-  return await prisma.user.findUnique({ where: { email } });
+  try {
+    return await prisma.user.findUnique({ where: { email } });
+  } catch (err: unknown) {
+    throw err instanceof Error ? err : new Error(String(err));
+  }
 };
 
 export const updateUserPasswordRepository = async (
