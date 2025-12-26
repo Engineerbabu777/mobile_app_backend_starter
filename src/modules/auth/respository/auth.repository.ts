@@ -89,9 +89,13 @@ export const markUserVerifiedToken = async (userId: string): Promise<void> => {
 };
 
 export const deleteVerificationTokenRepository = async (id: string): Promise<void> => {
-  await prisma.emailVerificationToken.delete({
-    where: { id },
-  });
+  try {
+    await prisma.emailVerificationToken.delete({
+      where: { id },
+    });
+  } catch (err: unknown) {
+    throw err instanceof Error ? err : new Error(String(err));
+  }
 };
 
 export const findResetTokenRepository = async (token: string) => {
