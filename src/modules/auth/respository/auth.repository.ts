@@ -7,7 +7,11 @@ import { PasswordResetToken, User } from '@/prisma/generated/prisma/client.js';
 import { prisma } from '@/src/shared/database/prisma.js';
 
 export const createUserRepository = async (data: SignupInput): Promise<User> => {
-  return await prisma.user.create({ data });
+  try {
+    return await prisma.user.create({ data });
+  } catch (err: unknown) {
+    throw err instanceof Error ? err : new Error(String(err));
+  }
 };
 
 export const findUserByEmailRepository = async (email: string): Promise<User | null> => {
