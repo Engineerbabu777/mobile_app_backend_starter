@@ -4,7 +4,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { SignupInput } from '../types/auth.types.js';
 
-import { PasswordResetToken, User } from '@/prisma/generated/prisma/client.js';
+import {
+  EmailVerificationToken,
+  PasswordResetToken,
+  User,
+} from '@/prisma/generated/prisma/client.js';
 import { prisma } from '@/src/shared/database/prisma.js';
 
 export const createUserRepository = async (data: SignupInput): Promise<User> => {
@@ -66,15 +70,12 @@ export const deletePasswordResetTokenRepository = async (
   }
 };
 
-export const findVerificationTokenToken = async (token: string) => {
-  try {
-    return await prisma.emailVerificationToken.findUnique({
-      where: { token },
-      include: { user: true },
-    });
-  } catch (err: unknown) {
-    throw err instanceof Error ? err : new Error(String(err));
-  }
+export const findEmailVerificationTokenRepository = async (
+  code: string,
+): Promise<EmailVerificationToken | null> => {
+  return await prisma.emailVerificationToken.findFirst({
+    where: { code },
+  });
 };
 
 export const markUserVerifiedToken = async (userId: string): Promise<void> => {
@@ -107,4 +108,18 @@ export const findResetTokenRepository = async (token: string) => {
   } catch (err: unknown) {
     throw err instanceof Error ? err : new Error(String(err));
   }
+};
+
+export const createEmailVerificationTokenRepository = async (
+  userId: string,
+  code: string,
+  expiresAt: Date,
+): Promise<EmailVerificationToken> => {
+  return await prisma.emailVerificationToken.create({
+    data: {
+      userId,
+      code,
+      expiresAt,
+    },
+  });
 };

@@ -4,8 +4,8 @@
 import {
   createUserRepository,
   deleteVerificationTokenRepository,
+  findEmailVerificationTokenRepository,
   findUserByEmailRepository,
-  findVerificationTokenToken,
   markUserVerifiedToken,
 } from '../respository/auth.repository.js';
 import { AuthResponse, SigninInput, SignupInput } from '../types/auth.types.js';
@@ -43,7 +43,7 @@ export const signinService = async (data: SigninInput): Promise<AuthResponse> =>
 };
 
 export const verifyEmailService = async (token: string): Promise<void> => {
-  const record = await findVerificationTokenToken(token);
+  const record = await findEmailVerificationTokenRepository(token);
 
   if (!record) {
     throw new Error('Invalid or expired verification token');

@@ -694,9 +694,9 @@ export type PasswordResetTokenScalarFieldEnum = (typeof PasswordResetTokenScalar
 
 export const EmailVerificationTokenScalarFieldEnum = {
   id: 'id',
-  token: 'token',
-  userId: 'userId',
+  code: 'code',
   expiresAt: 'expiresAt',
+  userId: 'userId',
   createdAt: 'createdAt'
 } as const
 
