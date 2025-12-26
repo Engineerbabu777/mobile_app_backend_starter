@@ -6,10 +6,13 @@ import { addMinutes } from 'date-fns';
 import {
   createPasswordResetCodeRepository,
   createUserRepository,
+  deletePasswordResetCodeRepository,
   deleteVerificationTokenRepository,
   findEmailVerificationTokenRepository,
+  findPasswordResetCodeRepository,
   findUserByEmailRepository,
   markUserVerifiedToken,
+  updateUserPasswordRepository,
 } from '../respository/auth.repository.js';
 import { AuthResponse, SigninInput, SignupInput } from '../types/auth.types.js';
 import { sendResetPasswordEmailUtil, sendVerificationEmailUtil } from '../utils/auth.utils.js';
@@ -69,4 +72,19 @@ export const forgotPasswordService = async (email: string): Promise<void> => {
 
   await createPasswordResetCodeRepository(user.id, code, expiresAt);
   await sendResetPasswordEmailUtil(user.email, code);
+};
+
+export const resetPasswordService = async (
+  code: string,
+  newPassword: string,
+  email: string,
+): Promise<void> => {
+  const record = await findPasswordResetCodeRepository(code, email);
+  if (!record) throw new Error('Invalid code');
+  if (record.expiresAt < new Date()) throw new Error('Code expired');
+
+  const hashedPassword = await hashPassword(newPassword);
+  await updateUserPasswordRepository(record.id, hashedPassword);
+
+  await deletePasswordResetCodeRepository(record.id);
 };
