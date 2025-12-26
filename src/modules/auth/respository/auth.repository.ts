@@ -115,11 +115,23 @@ export const createEmailVerificationTokenRepository = async (
   code: string,
   expiresAt: Date,
 ): Promise<EmailVerificationToken> => {
-  return await prisma.emailVerificationToken.create({
-    data: {
-      userId,
-      code,
-      expiresAt,
-    },
-  });
+  try {
+    return await prisma.emailVerificationToken.create({
+      data: {
+        userId,
+        code,
+        expiresAt,
+      },
+    });
+  } catch (err: unknown) {
+    throw err instanceof Error ? err : new Error(String(err));
+  }
+};
+
+export const deleteEmailVerificationTokenRepository = async (id: string): Promise<void> => {
+  try {
+    await prisma.emailVerificationToken.delete({ where: { id } });
+  } catch (err: unknown) {
+    throw err instanceof Error ? err : new Error(String(err));
+  }
 };
