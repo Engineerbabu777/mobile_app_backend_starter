@@ -99,8 +99,12 @@ export const deleteVerificationTokenRepository = async (id: string): Promise<voi
 };
 
 export const findResetTokenRepository = async (token: string) => {
-  return await prisma.passwordResetToken.findUnique({
-    where: { token },
-    include: { user: true },
-  });
+  try {
+    return await prisma.passwordResetToken.findUnique({
+      where: { token },
+      include: { user: true },
+    });
+  } catch (err: unknown) {
+    throw err instanceof Error ? err : new Error(String(err));
+  }
 };
