@@ -102,7 +102,11 @@ export const deleteVerificationTokenRepository = async (id: string): Promise<voi
 };
 
 export const deletePasswordResetCodeRepository = async (id: string): Promise<void> => {
-  await prisma.passwordResetToken.delete({ where: { id } });
+  try {
+    await prisma.passwordResetToken.delete({ where: { id } });
+  } catch (err: unknown) {
+    throw err instanceof Error ? err : new Error(String(err));
+  }
 };
 
 export const createEmailVerificationTokenRepository = async (
