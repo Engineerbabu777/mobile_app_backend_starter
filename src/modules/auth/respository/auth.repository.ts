@@ -53,9 +53,10 @@ export const createPasswordResetCodeRepository = async (
 
 export const findPasswordResetCodeRepository = async (
   code: string,
+  email: string,
 ): Promise<PasswordResetToken | null> => {
   try {
-    return await prisma.passwordResetToken.findFirst({ where: { code } });
+    return await prisma.passwordResetToken.findFirst({ where: { code, user: { email: email } } });
   } catch (err: unknown) {
     throw err instanceof Error ? err : new Error(String(err));
   }
@@ -100,16 +101,9 @@ export const deleteVerificationTokenRepository = async (id: string): Promise<voi
   }
 };
 
-// export const findResetTokenRepository = async (token: string) => {
-//   try {
-//     return await prisma.passwordResetToken.findUnique({
-//       where: { token },
-//       include: { user: true },
-//     });
-//   } catch (err: unknown) {
-//     throw err instanceof Error ? err : new Error(String(err));
-//   }
-// };
+export const deletePasswordResetCodeRepository = async (id: string): Promise<void> => {
+  await prisma.passwordResetToken.delete({ where: { id } });
+};
 
 export const createEmailVerificationTokenRepository = async (
   userId: string,
