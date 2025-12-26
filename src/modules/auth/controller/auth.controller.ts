@@ -3,12 +3,14 @@ import { NextFunction, Request, Response } from 'express';
 
 import {
   forgotPasswordService,
+  resetPasswordService,
   signinService,
   signupService,
   verifyEmailService,
 } from '../service/auth.service.js';
 import {
   ForgotPasswordInput,
+  ResetPasswordInput,
   SigninInput,
   SignupInput,
   VerifyEmailQueryInput,
@@ -78,6 +80,20 @@ export const forgotPasswordController = async (req: Request, res: Response, next
     res.status(200).json({
       success: true,
       message: 'Reset code sent to your email if the user exists',
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const resetPasswordController = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    const { code, newPassword, email } = req.body as ResetPasswordInput;
+    await resetPasswordService(code, newPassword, email);
+
+    res.status(200).json({
+      success: true,
+      message: 'Password has been reset successfully',
     });
   } catch (err) {
     next(err);

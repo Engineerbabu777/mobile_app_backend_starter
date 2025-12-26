@@ -16,14 +16,11 @@ export const forgotPasswordSchema = z.object({
 });
 
 export const resetPasswordSchema = z.object({
-  token: z.string(),
-  password: z.string().min(6),
+  code: z.string(),
+  newPassword: z.string().min(6),
+  email: z.string().email(),
 });
 
 export const verifyEmailQuerySchema = z.object({
   code: z.string().length(6, 'Verification code must be 6 digits'),
-});
-
-export const ForgotPasswordySchema = z.object({
-  email: z.string().email(),
 });

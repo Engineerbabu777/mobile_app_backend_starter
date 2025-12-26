@@ -14,8 +14,9 @@ export interface ForgotPasswordInput {
 }
 
 export interface ResetPasswordInput {
-  token: string;
-  password: string;
+  code: string;
+  newPassword: string;
+  email: string;
 }
 
 export interface VerifyEmailQueryInput {
