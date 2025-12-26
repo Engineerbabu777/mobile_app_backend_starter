@@ -1,11 +1,13 @@
 import { Router } from 'express';
 
 import {
+  forgotPasswordController,
   loginController,
   signupController,
   verifyEmailController,
 } from '@/src/modules/auth/controller/auth.controller.js';
 import {
+  forgotPasswordSchema,
   signinSchema,
   signupSchema,
   verifyEmailQuerySchema,
@@ -18,5 +20,7 @@ const router = Router();
 router.post('/signup', validateRequest(signupSchema), signupController);
 router.post('/login', validateRequest(signinSchema), loginController);
 router.post('/verify', validateQuery(verifyEmailQuerySchema), verifyEmailController);
+
+router.post('/forgot-password', validateRequest(forgotPasswordSchema), forgotPasswordController);
 
 export default router;

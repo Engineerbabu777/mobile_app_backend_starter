@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+
 import type { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
 
@@ -15,7 +15,7 @@ export const errorHandler = (
     res.status(422).json({
       success: false,
       message: 'Validation failed',
-      errors: (err as any).errors as any,
+      errors: err as any as any,
     });
     return;
   }
