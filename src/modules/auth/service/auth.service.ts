@@ -46,11 +46,11 @@ export const verifyEmailService = async (token: string): Promise<void> => {
   const record = await findEmailVerificationTokenRepository(token);
 
   if (!record) {
-    throw new Error('Invalid or expired verification token');
+    throw new Error('Invalid verification code');
   }
 
   if (record.expiresAt < new Date()) {
-    throw new Error('Verification token has expired');
+    throw new Error('Verification code has expired');
   }
 
   await markUserVerifiedToken(record.userId);
