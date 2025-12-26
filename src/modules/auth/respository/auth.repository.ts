@@ -66,9 +66,22 @@ export const deletePasswordResetTokenRepository = async (
   }
 };
 
-export const findVerificationToken = async (token: string) => {
+export const findVerificationTokenToken = async (token: string) => {
   return await prisma.emailVerificationToken.findUnique({
     where: { token },
     include: { user: true },
+  });
+};
+
+export const markUserVerifiedToken = async (userId: string): Promise<void> => {
+  await prisma.user.update({
+    where: { id: userId },
+    data: { isVerified: true },
+  });
+};
+
+export const deleteVerificationTokenToken = async (id: string): Promise<void> => {
+  await prisma.emailVerificationToken.delete({
+    where: { id },
   });
 };

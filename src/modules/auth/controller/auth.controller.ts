@@ -1,8 +1,8 @@
 /* eslint-disable @typescript-eslint/no-empty-object-type */
 import { NextFunction, Request, Response } from 'express';
 
-import { signinService, signupService } from '../service/auth.service.js';
-import { SigninInput, SignupInput } from '../types/auth.types.js';
+import { signinService, signupService, verifyEmailService } from '../service/auth.service.js';
+import { SigninInput, SignupInput, VerifyEmailQueryInput } from '../types/auth.types.js';
 
 export const signupController = async (
   req: Request<{}, {}, SignupInput>,
@@ -29,6 +29,23 @@ export const loginController = async (
     res.status(200).json({
       success: true,
       data: result,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
+export const verifyEmailController = async (
+  req: Request<{}, {}, {}, VerifyEmailQueryInput>,
+  res: Response,
+  next: NextFunction,
+): Promise<void> => {
+  try {
+    await verifyEmailService(req.query.token);
+
+    res.status(200).json({
+      success: true,
+      message: 'Email verified successfully',
     });
   } catch (err) {
     next(err);

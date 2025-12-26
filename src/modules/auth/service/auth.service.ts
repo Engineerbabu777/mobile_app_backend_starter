@@ -1,4 +1,13 @@
-import { createUserRepository, findUserByEmailRepository } from '../respository/auth.repository.js';
+/* eslint-disable @typescript-eslint/no-unsafe-argument */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+import {
+  createUserRepository,
+  deleteVerificationTokenToken,
+  findUserByEmailRepository,
+  findVerificationTokenToken,
+  markUserVerifiedToken,
+} from '../respository/auth.repository.js';
 import { AuthResponse, SigninInput, SignupInput } from '../types/auth.types.js';
 
 import { comparePassword, hashPassword } from '@/src/shared/utils/hash.js';
@@ -24,4 +33,19 @@ export const signinService = async (data: SigninInput): Promise<AuthResponse> =>
 
   const token = generateToken({ id: user.id, email: user.email });
   return { user: { id: user.id, email: user.email, name: user.name }, token };
+};
+
+export const verifyEmailService = async (token: string): Promise<void> => {
+  const record = await findVerificationTokenToken(token);
+
+  if (!record) {
+    throw new Error('Invalid or expired verification token');
+  }
+
+  if (record.expiresAt < new Date()) {
+    throw new Error('Verification token has expired');
+  }
+
+  await markUserVerifiedToken(record.userId);
+  await deleteVerificationTokenToken(record.id);
 };
