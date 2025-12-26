@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -38,27 +37,29 @@ export const updateUserPasswordRepository = async (
   }
 };
 
-export const createPasswordResetTokenRepository = async (
+export const createPasswordResetCodeRepository = async (
   userId: string,
-  token: string,
+  code: string,
   expiresAt: Date,
 ): Promise<PasswordResetToken> => {
   try {
-    return await prisma.passwordResetToken.create({ data: { userId, token, expiresAt } });
+    return await prisma.passwordResetToken.create({
+      data: { userId, code, expiresAt },
+    });
   } catch (err: unknown) {
     throw err instanceof Error ? err : new Error(String(err));
   }
 };
 
-export const findPasswordResetTokenRepository = async (
-  token: string,
-): Promise<PasswordResetToken | null> => {
-  try {
-    return await prisma.passwordResetToken.findUnique({ where: { token } });
-  } catch (err: unknown) {
-    throw err instanceof Error ? err : new Error(String(err));
-  }
-};
+// export const findPasswordResetTokenRepository = async (
+//   token: string,
+// ): Promise<PasswordResetToken | null> => {
+//   try {
+//     // return await prisma.passwordResetToken.findUnique({ where: { code:token } });
+//   } catch (err: unknown) {
+//     throw err instanceof Error ? err : new Error(String(err));
+//   }
+// };
 
 export const deletePasswordResetTokenRepository = async (
   id: string,
@@ -99,16 +100,16 @@ export const deleteVerificationTokenRepository = async (id: string): Promise<voi
   }
 };
 
-export const findResetTokenRepository = async (token: string) => {
-  try {
-    return await prisma.passwordResetToken.findUnique({
-      where: { token },
-      include: { user: true },
-    });
-  } catch (err: unknown) {
-    throw err instanceof Error ? err : new Error(String(err));
-  }
-};
+// export const findResetTokenRepository = async (token: string) => {
+//   try {
+//     return await prisma.passwordResetToken.findUnique({
+//       where: { token },
+//       include: { user: true },
+//     });
+//   } catch (err: unknown) {
+//     throw err instanceof Error ? err : new Error(String(err));
+//   }
+// };
 
 export const createEmailVerificationTokenRepository = async (
   userId: string,
