@@ -51,15 +51,15 @@ export const createPasswordResetCodeRepository = async (
   }
 };
 
-// export const findPasswordResetTokenRepository = async (
-//   token: string,
-// ): Promise<PasswordResetToken | null> => {
-//   try {
-//     // return await prisma.passwordResetToken.findUnique({ where: { code:token } });
-//   } catch (err: unknown) {
-//     throw err instanceof Error ? err : new Error(String(err));
-//   }
-// };
+export const findPasswordResetCodeRepository = async (
+  code: string,
+): Promise<PasswordResetToken | null> => {
+  try {
+    return await prisma.passwordResetToken.findFirst({ where: { code } });
+  } catch (err: unknown) {
+    throw err instanceof Error ? err : new Error(String(err));
+  }
+};
 
 export const deletePasswordResetTokenRepository = async (
   id: string,
