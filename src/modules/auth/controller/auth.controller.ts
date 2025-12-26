@@ -14,7 +14,7 @@ export const signupController = async (
     const result = await signupService(body);
     return res.status(201).json({
       success: true,
-      message: 'Signup successful. Please verify your email.',
+      message: 'Signup successful. Verification code sent to your email.',
       data: {
         id: result.user.id,
         email: result.user.email,

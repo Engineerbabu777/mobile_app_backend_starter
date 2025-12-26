@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import { Request, Response, NextFunction } from 'express';
 import { ZodSchema } from 'zod';
 
