@@ -38,7 +38,11 @@ export const createPasswordResetTokenRepository = async (
   token: string,
   expiresAt: Date,
 ): Promise<PasswordResetToken> => {
-  return await prisma.passwordResetToken.create({ data: { userId, token, expiresAt } });
+  try {
+    return await prisma.passwordResetToken.create({ data: { userId, token, expiresAt } });
+  } catch (err: unknown) {
+    throw err instanceof Error ? err : new Error(String(err));
+  }
 };
 
 export const findPasswordResetTokenRepository = async (
