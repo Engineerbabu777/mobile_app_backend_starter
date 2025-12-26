@@ -43,12 +43,13 @@ export const loginController = async (
 };
 
 export const verifyEmailController = async (
-  req: Request<{}, {}, {}, VerifyEmailQueryInput>,
+  req: Request,
   res: Response,
   next: NextFunction,
 ): Promise<void> => {
   try {
-    await verifyEmailService(req.query.token);
+    const { token } = req.query as unknown as VerifyEmailQueryInput;
+    await verifyEmailService(token);
 
     res.status(200).json({
       success: true,
