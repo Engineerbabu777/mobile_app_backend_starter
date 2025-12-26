@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-redundant-type-constituents */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
@@ -63,4 +64,11 @@ export const deletePasswordResetTokenRepository = async (
   } catch (err: unknown) {
     throw err instanceof Error ? err : new Error(String(err));
   }
+};
+
+export const findVerificationToken = async (token: string) => {
+  return await prisma.emailVerificationToken.findUnique({
+    where: { token },
+    include: { user: true },
+  });
 };
