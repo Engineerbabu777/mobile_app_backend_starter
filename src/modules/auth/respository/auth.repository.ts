@@ -26,7 +26,11 @@ export const updateUserPasswordRepository = async (
   userId: string,
   password: string,
 ): Promise<User> => {
-  return await prisma.user.update({ where: { id: userId }, data: { password } });
+  try {
+    return await prisma.user.update({ where: { id: userId }, data: { password } });
+  } catch (err: unknown) {
+    throw err instanceof Error ? err : new Error(String(err));
+  }
 };
 
 export const createPasswordResetTokenRepository = async (
