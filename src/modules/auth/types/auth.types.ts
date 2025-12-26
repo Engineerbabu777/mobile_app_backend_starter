@@ -29,3 +29,10 @@ export interface AuthResponse {
   user: Pick<User, 'id' | 'email' | 'name'>;
   token?: string;
 }
+
+// WE CAN MOVE THIS TO USER TYPES / SHARED TYPES !
+export interface PublicUser {
+  id: string;
+  email: string;
+  name: string | null;
+}
