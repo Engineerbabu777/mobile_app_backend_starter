@@ -27,7 +27,7 @@ model User {
 
   passwordResetTokens PasswordResetToken[]
 
-  emailVerificationTokens EmailVerificationToken[]
+  emailVerificationToken EmailVerificationToken?
 }
 
 model PasswordResetToken {
@@ -42,10 +42,11 @@ model PasswordResetToken {
 
 model EmailVerificationToken {
   id        String   @id @default(cuid())
-  code     String   @unique
-  userId    String
+  code      String
   expiresAt DateTime
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   createdAt DateTime @default(now())
 
-  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  @@index([code])
 }
