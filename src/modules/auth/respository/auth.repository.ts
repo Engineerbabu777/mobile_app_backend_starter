@@ -32,3 +32,7 @@ export const createPasswordResetTokenRepository = async (
 export const findPasswordResetToken = async (token: string): Promise<PasswordResetToken | null> => {
   return await prisma.passwordResetToken.findUnique({ where: { token } });
 };
+
+export const deletePasswordResetToken = async (id: string): Promise<PasswordResetToken> => {
+  return await prisma.passwordResetToken.delete({ where: { id } });
+};
