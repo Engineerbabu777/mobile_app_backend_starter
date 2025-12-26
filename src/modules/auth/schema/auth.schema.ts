@@ -20,7 +20,6 @@ export const resetPasswordSchema = z.object({
   password: z.string().min(6),
 });
 
-
 export const verifyEmailQuerySchema = z.object({
   token: z.string().min(10),
 });

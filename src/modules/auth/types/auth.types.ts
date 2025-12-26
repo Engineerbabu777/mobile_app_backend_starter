@@ -20,6 +20,11 @@ export interface ResetPasswordInput {
   password: string;
 }
 
+export interface VerifyEmailInput {
+  token: string;
+  password: string;
+}
+
 export interface AuthResponse {
   user: Pick<User, 'id' | 'email' | 'name'>;
   token: string;
