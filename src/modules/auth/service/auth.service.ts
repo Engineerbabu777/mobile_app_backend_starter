@@ -10,6 +10,8 @@ import {
 } from '../respository/auth.repository.js';
 import { AuthResponse, SigninInput, SignupInput } from '../types/auth.types.js';
 
+import { sendEmailHelper } from '@/src/shared/email/send-email.js';
+import { verificationEmailTemplate } from '@/src/shared/email/templates/verification-email-template.js';
 import { comparePassword, hashPassword } from '@/src/shared/utils/hash.js';
 import { generateToken } from '@/src/shared/utils/jwt.js';
 
@@ -48,4 +50,12 @@ export const verifyEmailService = async (token: string): Promise<void> => {
 
   await markUserVerifiedToken(record.userId);
   await deleteVerificationTokenRepository(record.id);
+};
+
+export const sendVerificationEmailService = async (email: string, code: string): Promise<void> => {
+  await sendEmailHelper({
+    to: email,
+    subject: 'Verify your email',
+    html: verificationEmailTemplate(code),
+  });
 };
