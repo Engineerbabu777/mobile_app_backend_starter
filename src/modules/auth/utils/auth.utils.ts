@@ -10,7 +10,6 @@ export const sendVerificationEmailUtil = async (email: string, code: string): Pr
   });
 };
 
-
 export const sendResetPasswordEmailUtil = async (email: string, code: string): Promise<void> => {
   await sendEmailHelper({
     to: email,

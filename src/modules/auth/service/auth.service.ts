@@ -12,7 +12,7 @@ import {
   markUserVerifiedToken,
 } from '../respository/auth.repository.js';
 import { AuthResponse, SigninInput, SignupInput } from '../types/auth.types.js';
-import { sendVerificationEmailUtil } from '../utils/auth.utils.js';
+import { sendResetPasswordEmailUtil, sendVerificationEmailUtil } from '../utils/auth.utils.js';
 
 import { toPublicUser } from '@/src/shared/mappers/user.mapper.js';
 import { comparePassword, hashPassword } from '@/src/shared/utils/hash.js';
@@ -64,10 +64,9 @@ export const forgotPasswordService = async (email: string): Promise<void> => {
   const user = await findUserByEmailRepository(email);
   if (!user) throw new Error('User with this email does not exist');
 
-  // generate 6-digit code
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const expiresAt = addMinutes(new Date(), 10);
 
   await createPasswordResetCodeRepository(user.id, code, expiresAt);
-  // await send(user.email, code);
+  await sendResetPasswordEmailUtil(user.email, code);
 };
