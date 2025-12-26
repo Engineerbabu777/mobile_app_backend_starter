@@ -19,12 +19,13 @@ import { AuthResponse, SigninInput, SignupInput } from '../types/auth.types.js';
 import { sendResetPasswordEmailUtil, sendVerificationEmailUtil } from '../utils/auth.utils.js';
 
 import { toPublicUser } from '@/src/shared/mappers/user.mapper.js';
+import { AppError } from '@/src/shared/utils/app-error.js';
 import { comparePassword, hashPassword } from '@/src/shared/utils/hash.js';
 import { generateToken } from '@/src/shared/utils/jwt.js';
 
 export const signupService = async (data: SignupInput): Promise<AuthResponse> => {
   const existingUser = await findUserByEmailRepository(data.email);
-  if (existingUser) throw new Error('Email already registered');
+  if (existingUser) throw new AppError('Email already registered', 409);
 
   const hashed = await hashPassword(data.password);
   const user = await createUserRepository({ ...data, password: hashed });
@@ -38,10 +39,10 @@ export const signupService = async (data: SignupInput): Promise<AuthResponse> =>
 
 export const signinService = async (data: SigninInput): Promise<AuthResponse> => {
   const user = await findUserByEmailRepository(data.email);
-  if (!user) throw new Error('Invalid credentials');
+  if (!user) throw new AppError('Invalid credentials', 401);
 
   const isValid = await comparePassword(data.password, user.password);
-  if (!isValid) throw new Error('Invalid credentials');
+  if (!isValid) throw new AppError('Invalid credentials', 401);
 
   const token = generateToken({ id: user.id, email: user.email });
 
@@ -55,11 +56,11 @@ export const verifyEmailService = async (token: string): Promise<void> => {
   const record = await findEmailVerificationTokenRepository(token);
 
   if (!record) {
-    throw new Error('Invalid verification code');
+    throw new AppError('Invalid verification code', 400);
   }
 
   if (record.expiresAt < new Date()) {
-    throw new Error('Verification code has expired');
+    throw new AppError('Verification code has expired', 400);
   }
 
   await markUserVerifiedToken(record.userId);
@@ -68,7 +69,7 @@ export const verifyEmailService = async (token: string): Promise<void> => {
 
 export const forgotPasswordService = async (email: string): Promise<void> => {
   const user = await findUserByEmailRepository(email);
-  if (!user) throw new Error('User with this email does not exist');
+  if (!user) throw new AppError('User with this email does not exist', 404);
 
   const code = Math.floor(100000 + Math.random() * 900000).toString();
   const expiresAt = addMinutes(new Date(), 10);
@@ -83,8 +84,8 @@ export const resetPasswordService = async (
   email: string,
 ): Promise<void> => {
   const record = await findPasswordResetCodeRepository(code, email);
-  if (!record) throw new Error('Invalid code');
-  if (record.expiresAt < new Date()) throw new Error('Code expired');
+  if (!record) throw new AppError('Invalid code', 400);
+  if (record.expiresAt < new Date()) throw new AppError('Code expired', 400);
 
   const hashedPassword = await hashPassword(newPassword);
   await updateUserPasswordRepository(record.userId, hashedPassword);

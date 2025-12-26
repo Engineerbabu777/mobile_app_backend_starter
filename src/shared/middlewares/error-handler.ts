@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 
@@ -7,6 +7,7 @@ import type { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
 
 import logger from '../logger/logger.js';
+import { AppError } from '../utils/app-error.js';
 
 export const errorHandler = (
   err: unknown,
@@ -14,18 +15,30 @@ export const errorHandler = (
   res: Response,
   _next: NextFunction,
 ): void => {
+  const error = err as any;
+
   logger.error({
-    message: (err as any).message,
-    stack: (err as any).stack,
+    message: error.message,
+    stack: error.stack,
     route: (_req as any).originalUrl,
     method: (_req as any).method,
   });
 
   if (err instanceof ZodError) {
+    const errors = err as any;
+
     res.status(422).json({
       success: false,
       message: 'Validation failed',
-      errors: err as any as any,
+      errors: errors,
+    });
+    return;
+  }
+
+  if (err instanceof AppError) {
+    res.status(err.statusCode).json({
+      success: false,
+      message: err.message,
     });
     return;
   }

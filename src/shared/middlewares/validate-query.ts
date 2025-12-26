@@ -5,7 +5,7 @@ export const validateQuery =
   (schema: ZodSchema) =>
   (req: Request, _res: Response, next: NextFunction): void => {
     try {
-      schema.parse(req.query);
+      req.query = schema.parse(req.query) as typeof req.params & typeof schema;
       next();
     } catch (err) {
       next(err);
