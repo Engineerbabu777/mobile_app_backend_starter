@@ -10,3 +10,7 @@ export const createUserRepository = async (data: SignupInput): Promise<User> => 
 export const findUserByEmail = async (email: string): Promise<User | null> => {
   return prisma.user.findUnique({ where: { email } });
 };
+
+export const updateUserPassword = async (userId: string, password: string): Promise<User> => {
+  return prisma.user.update({ where: { id: userId }, data: { password } });
+};
