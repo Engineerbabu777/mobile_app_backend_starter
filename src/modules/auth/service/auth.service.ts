@@ -11,6 +11,7 @@ import {
 import { AuthResponse, SigninInput, SignupInput } from '../types/auth.types.js';
 import { sendVerificationEmailUtil } from '../utils/auth.utils.js';
 
+import { toPublicUser } from '@/src/shared/mappers/user.mapper.js';
 import { comparePassword, hashPassword } from '@/src/shared/utils/hash.js';
 import { generateToken } from '@/src/shared/utils/jwt.js';
 
@@ -23,7 +24,7 @@ export const signupService = async (data: SignupInput): Promise<AuthResponse> =>
   const verificationCode = Math.floor(100000 + Math.random() * 900000).toString();
 
   await sendVerificationEmailUtil(user.email, verificationCode);
-  return { user: { id: user.id, email: user.email, name: user.name } };
+  return { user: toPublicUser(user) };
 };
 
 export const signinService = async (data: SigninInput): Promise<AuthResponse> => {
@@ -34,7 +35,11 @@ export const signinService = async (data: SigninInput): Promise<AuthResponse> =>
   if (!isValid) throw new Error('Invalid credentials');
 
   const token = generateToken({ id: user.id, email: user.email });
-  return { user: { id: user.id, email: user.email, name: user.name }, token };
+
+  return {
+    user: toPublicUser(user),
+    token,
+  };
 };
 
 export const verifyEmailService = async (token: string): Promise<void> => {
