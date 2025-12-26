@@ -98,3 +98,10 @@ export const findResetToken = async (token: string) => {
     include: { user: true },
   });
 };
+
+export const updateUserPassword = async (userId: string, hashedPassword: string): Promise<void> => {
+  await prisma.user.update({
+    where: { id: userId },
+    data: { password: hashedPassword },
+  });
+};
