@@ -73,9 +73,13 @@ export const findEmailVerificationTokenRepository = async (
   email: string,
   code: string,
 ): Promise<EmailVerificationToken | null> => {
-  return await prisma.emailVerificationToken.findFirst({
-    where: { user: { email }, code: code },
-  });
+  try {
+    return await prisma.emailVerificationToken.findFirst({
+      where: { user: { email }, code: code },
+    });
+  } catch (err: unknown) {
+    throw err instanceof Error ? err : new Error(String(err));
+  }
 };
 
 export const markUserVerifiedToken = async (userId: string): Promise<void> => {
