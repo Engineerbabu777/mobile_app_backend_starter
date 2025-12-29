@@ -20,8 +20,8 @@ export interface ResetPasswordInput {
 }
 
 export interface VerifyEmailQueryInput {
-  token: string;
-  password: string;
+  code: string;
+  email: string;
 }
 
 export interface AuthResponse {

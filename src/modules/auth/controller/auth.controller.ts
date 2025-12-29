@@ -60,8 +60,8 @@ export const verifyEmailController = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { token } = req.query as unknown as VerifyEmailQueryInput;
-    await verifyEmailService(token);
+    const { code, email } = req.query as unknown as VerifyEmailQueryInput;
+    await verifyEmailService(code, email);
 
     res.status(200).json({
       success: true,
