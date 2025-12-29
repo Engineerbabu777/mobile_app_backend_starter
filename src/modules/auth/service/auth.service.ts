@@ -11,7 +11,7 @@ import {
   findUserByEmailRepository,
   markUserVerifiedToken,
   updateUserPasswordRepository,
-} from '../respository/auth.repository.js';
+} from '../repository/auth.repository.js';
 import { AuthResponse, SigninInput, SignupInput } from '../types/auth.types.js';
 import { sendResetPasswordEmailUtil, sendVerificationEmailUtil } from '../utils/auth.utils.js';
 
