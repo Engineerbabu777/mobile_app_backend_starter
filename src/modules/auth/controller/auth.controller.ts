@@ -44,15 +44,17 @@ export const loginController = catchAsync(
   },
 );
 
-export const verifyEmailController = catchAsync(async (req: Request, res: Response): Promise<void> => {
-  const { code, email } = req.body as unknown as VerifyEmailInput;
-  await verifyEmailService(code, email);
+export const verifyEmailController = catchAsync(
+  async (req: Request, res: Response): Promise<void> => {
+    const { code, email } = req.body as unknown as VerifyEmailInput;
+    await verifyEmailService(code, email);
 
-  res.status(200).json({
-    success: true,
-    message: 'Email verified successfully',
-  });
-});
+    res.status(200).json({
+      success: true,
+      message: 'Email verified successfully',
+    });
+  },
+);
 
 export const forgotPasswordController = catchAsync(async (req: Request, res: Response) => {
   const { email } = req.body as ForgotPasswordInput;
