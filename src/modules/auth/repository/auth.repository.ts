@@ -70,10 +70,11 @@ export const deletePasswordResetTokenRepository = async (
 };
 
 export const findEmailVerificationTokenRepository = async (
+  email: string,
   code: string,
 ): Promise<EmailVerificationToken | null> => {
   return await prisma.emailVerificationToken.findFirst({
-    where: { code },
+    where: { user: { email }, code: code },
   });
 };
 

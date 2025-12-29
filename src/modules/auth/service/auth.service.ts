@@ -50,7 +50,7 @@ export const signinService = async (data: SigninInput): Promise<AuthResponse> =>
 };
 
 export const verifyEmailService = async (token: string): Promise<void> => {
-  const record = await findEmailVerificationTokenRepository(token);
+  const record = await findEmailVerificationTokenRepository('', token);
 
   if (!record) {
     throw new AppError('Invalid verification code', 400);
