@@ -1,8 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-
 import type { Request, Response, NextFunction } from 'express';
 import { ZodError } from 'zod';
 
@@ -11,26 +6,30 @@ import { AppError } from '../utils/app-error.js';
 
 export const errorHandler = (
   err: unknown,
-  _req: Request,
+  req: Request,
   res: Response,
   _next: NextFunction,
 ): void => {
-  const error = err as any;
-
-  logger.error({
-    message: error.message,
-    stack: error.stack,
-    route: (_req as any).originalUrl,
-    method: (_req as any).method,
-  });
+  if (err instanceof Error) {
+    logger.error({
+      message: err.message,
+      stack: err.stack,
+      route: req.originalUrl,
+      method: req.method,
+    });
+  } else {
+    logger.error({
+      message: 'Unknown error',
+      route: req.originalUrl,
+      method: req.method,
+    });
+  }
 
   if (err instanceof ZodError) {
-    const errors = err as any;
-
     res.status(422).json({
       success: false,
       message: 'Validation failed',
-      errors: errors,
+      errors: err.issues,
     });
     return;
   }
