@@ -43,6 +43,9 @@ coverage/
 *.swo
 *.sublime-workspace
 *.sublime-project
+CODE_QUALITY_RESULTS.txt
+./CODE_QUALITY_RESULTS.txt
+
 .zencoder
 .zenflow
 
