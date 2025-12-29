@@ -19,7 +19,7 @@ export interface ResetPasswordInput {
   email: string;
 }
 
-export interface VerifyEmailQueryInput {
+export interface VerifyEmailInput {
   code: string;
   email: string;
 }

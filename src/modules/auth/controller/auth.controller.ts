@@ -13,7 +13,7 @@ import {
   ResetPasswordInput,
   SigninInput,
   SignupInput,
-  VerifyEmailQueryInput,
+  VerifyEmailInput,
 } from '../types/auth.types.js';
 
 export const signupController = async (
@@ -60,7 +60,7 @@ export const verifyEmailController = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { code, email } = req.query as unknown as VerifyEmailQueryInput;
+    const { code, email } = req.query as unknown as VerifyEmailInput;
     await verifyEmailService(code, email);
 
     res.status(200).json({
