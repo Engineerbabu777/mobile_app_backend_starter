@@ -1,8 +1,7 @@
 import cors from 'cors';
 
-import { env } from '@/src/config/env.config.js';
-
-const allowedOrigins = env.CORS_ORIGINS ? env.CORS_ORIGINS.split(',') : ['http://localhost:3000'];
+// const allowedOrigins = env.CORS_ORIGINS ? env.CORS_ORIGINS.split(',') : ['http://localhost:3000'];
+const allowedOrigins = ['*'];
 
 export const corsMiddleware = cors({
   origin: (origin, callback) => {
