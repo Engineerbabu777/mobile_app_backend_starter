@@ -1,5 +1,6 @@
 import type { SentMessageInfo } from 'nodemailer';
 
+import { env } from '@/src/config/env.config.js';
 import { mailTransporter } from '@/src/config/mail.config.js';
 
 interface SendEmailParams {
@@ -14,7 +15,7 @@ export const sendEmailHelper = async ({
   html,
 }: SendEmailParams): Promise<SentMessageInfo> => {
   return mailTransporter.sendMail({
-    from: process.env.MAIL_FROM,
+    from: env.MAIL_FROM,
     to,
     subject,
     html,

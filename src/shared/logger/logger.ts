@@ -1,8 +1,10 @@
 import pino from 'pino';
 
+import { env } from '../../config/env.config.js';
+
 const logger = pino({
   transport:
-    process.env.NODE_ENV !== 'production'
+    env.NODE_ENV !== 'production'
       ? {
           target: 'pino-pretty',
           options: {
@@ -12,7 +14,7 @@ const logger = pino({
           },
         }
       : undefined,
-  level: process.env.LOG_LEVEL,
+  level: env.LOG_LEVEL,
 });
 
 export default logger;
