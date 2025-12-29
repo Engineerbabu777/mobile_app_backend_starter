@@ -60,7 +60,7 @@ export const verifyEmailController = async (
   next: NextFunction,
 ): Promise<void> => {
   try {
-    const { code, email } = req.query as unknown as VerifyEmailInput;
+    const { code, email } = req.body as unknown as VerifyEmailInput;
     await verifyEmailService(code, email);
 
     res.status(200).json({

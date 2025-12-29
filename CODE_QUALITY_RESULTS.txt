@@ -1,0 +1,53 @@
+# Code Quality Analysis Results
+
+## Overall Rating: 7.5 / 10
+
+### Overview
+The project follows a solid modular architecture with a clear separation of concerns (Controllers, Services, Repositories). It uses modern tools like TypeScript, Prisma, Zod, and ESLint, which is excellent. However, there are areas for improvement regarding redundancy, consistency, and minor bugs.
+
+---
+
+### 1. Folder Structure & Naming
+- **Positives**: Modular design (e.g., `src/modules/auth`, `src/modules/user`) makes the project scalable.
+- **Failed Points**:
+    - **Typo**: `src/modules/user/respository` (should be `repository`).
+    - **Inconsistency**: Some repository functions end with `Repository` (e.g., `createUserRepository`), while others don't (e.g., `markUserVerifiedToken`).
+- **Recommendation**: Standardize naming conventions and fix the directory typo.
+
+### 2. Code Quality & Best Practices
+- **Positives**: Use of mappers (`toPublicUser`), Zod schemas for validation, and shared utilities.
+- **Failed Points**:
+    - **Redundant Code**: Repository functions contain `try-catch` blocks that simply re-throw errors. This is unnecessary boilerplate as Prisma already throws errors.
+    - **Controller Boilerplate**: Every controller method is wrapped in `try-catch`. 
+    - **Duplicate Functions**: `deletePasswordResetTokenRepository` and `deletePasswordResetCodeRepository` are identical.
+    - **Hardcoded Values**: Token expiry (10 minutes) is hardcoded in services.
+- **Recommendations**:
+    - Use an `asyncHandler` wrapper for controllers to remove repetitive `try-catch`.
+    - Remove redundant `try-catch` from repositories.
+    - Extract hardcoded values to constants or environment variables.
+
+### 3. Error Handling
+- **Positives**: Centralized `errorHandler` middleware and a custom `AppError` class.
+- **Failed Points**:
+    - **Excessive Use of `any`**: The `errorHandler` uses `any` frequently, losing TypeScript benefits.
+    - **Broad Error Catching**: Catching `instanceof Error` and returning a 400 status might inadvertently expose internal errors or misclassify 500 errors as client-side errors.
+- **Recommendation**: Refine error types and avoid `any` in the middleware.
+
+### 4. Validation & Routes
+- **Failed Points**:
+    - **Validation Mismatch**: The `validateRequest` middleware only parses `req.body`. However, `verifyEmailController` expects data from `req.query`, but the route uses `validateRequest(verifyEmailSchema)` which looks at the body.
+- **Recommendation**: Update `validateRequest` to support body, query, and params validation.
+
+### 5. Security & Tooling
+- **Positives**: Husky, Commitlint, ESLint, Prettier are all set up. Using `helmet` and `express-rate-limit` is a great security practice.
+- **Failed Points**:
+    - **ESLint Ignores**: Many files have `/* eslint-disable ... */`. It's better to fix the linting issues or adjust the config globally.
+
+---
+
+### Final Recommendations
+1. **Fix Typo**: Rename `respository` to `repository`.
+2. **Remove Redundancy**: Clean up the repository layer by removing unnecessary try-catches.
+3. **Async Wrapper**: Implement a utility like `catchAsync` to wrap controller functions.
+4. **Fix Validation**: Ensure `validateRequest` correctly handles query parameters where needed.
+5. **Types**: Improve typing in the error handler and avoid `any`.
