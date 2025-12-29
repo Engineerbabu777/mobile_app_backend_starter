@@ -23,4 +23,5 @@ export const resetPasswordSchema = z.object({
 
 export const verifyEmailQuerySchema = z.object({
   code: z.string().length(6, 'Verification code must be 6 digits'),
+  email: z.string().email(),
 });
